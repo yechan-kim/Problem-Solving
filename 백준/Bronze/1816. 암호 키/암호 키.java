@@ -11,16 +11,12 @@ public class Main {
         for (int i = 0; i < N; i++) {
             long S = Long.parseLong(br.readLine());
 
-            if (S >= 1000000) {
-                for (int j = 2; j < 1000000; j++) {
-                    if (S % j == 0) {
-                        bw.write("NO\n");
-                        break;
-                    } else if (j == 999999)
-                        bw.write("YES\n");
-                }
-            } else {
-                bw.write("NO\n");
+            for (int j = 2; j < 1000000; j++) {
+                if (S % j == 0) {
+                    bw.write("NO\n");
+                    break;
+                } else if (j == 999999)
+                    bw.write("YES\n");
             }
         }
 
