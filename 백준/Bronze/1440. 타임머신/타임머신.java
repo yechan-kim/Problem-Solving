@@ -6,29 +6,23 @@ public class Main {
 
         String[] N;
         int[] time = new int[3];
-        int HH = 0, MM = 0, SS = 0;
         N = scan.next().split(":");
+        int count = 0;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++)
             time[i] = Integer.parseInt(N[i]);
 
-//            if (time[i] >= 1 && time[i] <= 12)
-//                HH++;
-            if (time[i] >= 13 && time[i] <= 59) {
-//                MM++;
-//                SS++;
-                HH++;
-            }
-            if (time[i] == 0) {
-                HH++;
-            } else if(time[i] >59) {
-                MM++;
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                for(int k = 0; k < 3; k++) {
+                    if(i != j && j != k && k != i){
+                        if(time[i] >= 1 && time[i] <= 12 && time[j] >= 0 && time[j] <= 59 && time[k] >= 0 && time[k] <= 59)
+                            count++;
+                    }
+                }
             }
         }
-        if(MM>0){
-            System.out.println(0);
-        }else {
-            System.out.println((3 - HH) * 2);
-        }
+
+        System.out.println(count);
     }
 }
