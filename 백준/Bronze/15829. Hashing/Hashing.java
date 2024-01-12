@@ -8,14 +8,15 @@ public class Main {
 
         int L = Integer.parseInt(br.readLine());
         String str = br.readLine();
-        int result = 0;
+        long result = 0;
+        long pow = 1;
 
-        for (int i = 0; i < L; i++) {
-            int temp = str.charAt(i) - 'a' + 1;
-            result += temp * (int) Math.pow(31, i);
+        for (int i = 0; i < L; i++){
+            result += (str.charAt(i) - 'a' + 1) * pow;
+            pow = (pow * 31) % 1234567891;
         }
 
-        bw.write(String.valueOf(result));
+        bw.write(String.valueOf(result % 1234567891));
 
         bw.flush();
         bw.close();
