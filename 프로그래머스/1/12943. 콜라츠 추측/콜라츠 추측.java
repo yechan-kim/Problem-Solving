@@ -1,9 +1,9 @@
 class Solution {
-    public int solution(int num) {
+    public int solution(long num) {
         if(num == 1)
             return 0;
         
-        for(int i=1; i<=300; i++){
+        for(int i=1; i<=500; i++){
             if(num % 2 == 0)
                 num /= 2;
             
