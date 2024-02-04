@@ -7,11 +7,6 @@ class Solution {
         Map<String, Integer> reportMap = new HashMap<>();
         Set<String> uniqueReports = new HashSet<>(Arrays.asList(report));
 
-        for (String str : id_list) {
-            countMap.put(str, 0);
-            reportMap.put(str, 0);
-        }
-
         for (String str : uniqueReports) {
             String[] temp = str.split(" ");
             countMap.put(temp[1], countMap.getOrDefault(temp[1], 0) + 1);
