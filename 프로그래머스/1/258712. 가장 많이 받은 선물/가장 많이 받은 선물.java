@@ -22,7 +22,7 @@ class Solution {
 
         for (int i = 0; i < friends.length; i++) {
             for (int j = 0; j < friends.length; j++) {
-                if (i != j || !valid[j][i]) {
+                if (i != j && !valid[j][i]) {
                     if (gift[i][j] > gift[j][i]) {
                         nextGift[i]++;
                     } else if (gift[i][j] < gift[j][i]) {
@@ -42,6 +42,6 @@ class Solution {
             }
         }
 
-        return Arrays.stream(nextGift).max().getAsInt() / 2;
+        return Arrays.stream(nextGift).max().getAsInt();
     }
 }
