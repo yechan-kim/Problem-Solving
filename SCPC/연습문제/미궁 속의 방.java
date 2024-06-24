@@ -44,61 +44,45 @@ class Solution {
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
             int N = sc.nextInt();
-            long[][] map = new long[N][N];
+            int K = sc.nextInt();
+            String cmd = sc.next();
 
             int x = 0, y = 0;
-            boolean goingRight = true;
-
-            for (long i = 1; i <= N * N; i++) {
-                map[y][x] = i;
-
-                if (goingRight) {
-                    if (x + 1 < N && y - 1 >= 0) {
-                        x++;
-                        y--;
-                    } else if (x + 1 < N) {
-                        x++;
-                        goingRight = !goingRight;
-                    } else {
-                        y++;
-                        goingRight = !goingRight;
-                    }
-                } else {
-                    if (y + 1 < N && x - 1 >= 0) {
-                        y++;
-                        x--;
-                    } else if (y + 1 < N) {
-                        y++;
-                        goingRight = !goingRight;
-                    } else {
-                        x++;
-                        goingRight = !goingRight;
-                    }
-                }
-            }
-
-            int K = sc.nextInt();
-            String command = sc.next();
-            x = 0;
-            y = 0;
+            int base = 0;
+            boolean rd = false;
 
             for (int i = 0; i < K; i++) {
-                char cmd = command.charAt(i);
-                switch (cmd) {
+                switch (cmd.charAt(i)) {
                     case 'U':
-                        y--;
+                        x--;
+                        rd = false;
                         break;
                     case 'D':
-                        y++;
+                        x++;
+                        rd = true;
                         break;
                     case 'L':
-                        x--;
+                        y--;
+                        rd = false;
                         break;
                     case 'R':
-                        x++;
+                        y++;
+                        rd = true;
                         break;
                 }
-                Answer += map[y][x];
+
+                int pointSum = x + y;
+                if (pointSum < N) {
+                    if (rd) base += pointSum;
+                    else base -= pointSum + 1;
+                    if (pointSum % 2 == 0) Answer += base + y + 1;
+                    else Answer += base + x + 1;
+                } else {
+                    if (rd) base += 2 * N - pointSum;
+                    else base -= 2 * N - (pointSum + 1);
+                    if (pointSum % 2 == 0) Answer += base + N - x;
+                    else Answer += base + N - y;
+                }
             }
 
             // Print the answer to standard output(screen).
