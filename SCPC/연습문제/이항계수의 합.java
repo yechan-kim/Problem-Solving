@@ -17,8 +17,9 @@ import java.util.Scanner;
 class Solution {
     static long Answer;
     static final int MOD = 1000000007;
-    static int N, M, MAX;
-    static long[] fac, facInv;
+    static final int MAX = 2000002;
+    static long[] fac = new long[MAX + 1];
+    static long[] facInv = new long[MAX + 1];
 
     public static void main(String args[]) throws Exception {
 		/*
@@ -35,6 +36,14 @@ class Solution {
         Scanner sc = new Scanner(System.in);
         //Scanner sc = new Scanner(new FileInputStream("input.txt"));
 
+        long top = 1;
+
+        for (int i = 1; i <= MAX; i++) {
+            fac[i] = (top = (top * i) % MOD);
+        }
+
+        getInv();
+
         int T = sc.nextInt();
         for (int test_case = 0; test_case < T; test_case++) {
 
@@ -45,20 +54,8 @@ class Solution {
 			   The answer to the case will be stored in variable Answer.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
-            N = sc.nextInt();
-            M = sc.nextInt();
-
-            MAX = N + M + 2;
-            fac = new long[MAX + 1];
-            facInv = new long[MAX + 1];
-
-            long top = 1;
-
-            for (int i = 1; i <= MAX; i++) {
-                fac[i] = (top = (top * i) % MOD);
-            }
-
-            getInv();
+            int N = sc.nextInt();
+            int M = sc.nextInt();
 
             Answer = getBinary(N, M) - 1;
 
