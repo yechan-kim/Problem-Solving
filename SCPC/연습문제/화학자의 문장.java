@@ -18,7 +18,7 @@ import java.util.Scanner;
  */
 class Solution {
     static String Answer;
-    static int DP[];
+    static boolean[] DP;
     static String input;
     static List<String> elements = new ArrayList<>();
 
@@ -53,7 +53,7 @@ class Solution {
 
         int T = sc.nextInt();
         for (int test_case = 0; test_case < T; test_case++) {
-            Answer = "";
+            Answer = "NO";
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   Implement your algorithm here.
@@ -61,10 +61,9 @@ class Solution {
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
             input = sc.next().toUpperCase();
-            DP = new int[input.length()];
+            DP = new boolean[input.length()];
 
-            if (chemString(0)) Answer = "YES";
-            else Answer = "NO";
+            Answer = solve();
 
             // Print the answer to standard output(screen).
             System.out.println("Case #" + (test_case + 1));
@@ -72,49 +71,26 @@ class Solution {
         }
     }
 
-    private static boolean chemString(int index) {
-        if (index == input.length())
-            return true;
-
-        if (DP[index] == -1) {
-            return false;
-        }
-        if (DP[index] == 1) {
-
-            if (index > 0 && DP[index - 1] == -1)
-                return false;
-            else {
-                if (isContains(index)) {
-                    DP[index + 1] = 1;
-                    return chemString(index + 2);
+    private static String solve() {
+        for (int i = 0; i < input.length(); i++) {
+            for (String element : elements) {
+                if (element.length() == 1) {
+                    if (input.charAt(i) == element.charAt(0)) {
+                        DP[i] = true;
+                    }
+                } else {
+                    if (i > 0 && input.charAt(i) == element.charAt(1) && input.charAt(i - 1) == element.charAt(0)) {
+                        DP[i - 1] = true;
+                        DP[i] = true;
+                    }
                 }
             }
         }
 
-        if (isContain(index)) {
-            DP[index] = 1;
-            return chemString(index + 1);
-        } else if (index < input.length() - 1 && isContains(index)) {
-            DP[index] = -1;
-            DP[index + 1] = 1;
-            return chemString(index + 2);
-        } else {
-            if (index == 0) return false;
-            DP[index] = -1;
-            return chemString(index - 1);
+        for (boolean b : DP) {
+            if (!b) return "NO";
         }
 
-    }
-
-    private static boolean isContain(int i) {
-        String s = input.charAt(i) + "";
-        if (elements.contains(s)) return true;
-        else return false;
-    }
-
-    private static boolean isContains(int i) {
-        String s = input.charAt(i) + "" + input.charAt(i + 1);
-        if (elements.contains(s)) return true;
-        else return false;
+        return "YES";
     }
 }
