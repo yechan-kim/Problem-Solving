@@ -15,7 +15,7 @@ import java.util.Scanner;
    In any case, you can execute your program by running 'java Solution' command.
  */
 class Solution {
-    static int[] arr;
+    static int Answer;
 
     public static void main(String args[]) throws Exception {
 		/*
@@ -42,32 +42,34 @@ class Solution {
             /////////////////////////////////////////////////////////////////////////////////////////////
             int N = sc.nextInt();
             int S = sc.nextInt();
-            arr = new int[N];
+            int[] arr = new int[N];
 
             for (int i = 0; i < N; i++) {
                 arr[i] = sc.nextInt();
             }
 
+            int start, end;
+            start = end = 0;
+            int sum = 0;
+            int ans = Integer.MAX_VALUE;
+
+            while (start <= end && start < N) {
+                if (sum >= S) {
+                    ans = Math.min(ans, end - start);
+                    sum -= arr[start];
+                    start++;
+                } else if (end < N) {
+                    sum += arr[end];
+                    end++;
+                } else
+                    break;
+
+            }
+            Answer = (ans == Integer.MAX_VALUE ? 0 : ans);
+
             // Print the answer to standard output(screen).
             System.out.println("#testcase" + (test_case + 1));
-            System.out.println(solve(N, S));
+            System.out.println(Answer);
         }
-    }
-
-    private static int solve(int N, int S) {
-        int minLength = Integer.MAX_VALUE;
-        int sum = 0;
-        int left = 0;
-
-        for (int right = 0; right < N; right++) {
-            sum += arr[right];
-
-            while (sum >= S) {
-                minLength = Math.min(minLength, right - left + 1);
-                sum -= arr[left++];
-            }
-        }
-
-        return minLength == Integer.MAX_VALUE ? 0 : minLength;
     }
 }
