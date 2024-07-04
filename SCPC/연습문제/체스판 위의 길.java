@@ -8,8 +8,7 @@ Do not use file input and output
 Please be very careful.
 */
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -19,7 +18,7 @@ import java.util.Scanner;
 class Solution {
     static int Answer;
     static int MOD = 1000000007;
-    static HashMap<Integer, ArrayList<Integer>> obstacles;
+    static int MAX_OBSTACLE = 200000;
 
     public static void main(String args[]) throws Exception {
 		/*
@@ -36,64 +35,133 @@ class Solution {
         Scanner sc = new Scanner(System.in);
         //Scanner sc = new Scanner(new FileInputStream("input.txt"));
 
+        init();
+
         int T = sc.nextInt();
         for (int test_case = 0; test_case < T; test_case++) {
 
             Answer = 0;
-            obstacles = new HashMap<>();
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   Implement your algorithm here.
 			   The answer to the case will be stored in variable Answer.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
-            int N = sc.nextInt();
-            int M = sc.nextInt();
-            int K = sc.nextInt();
+            int n = sc.nextInt();
+            int m = sc.nextInt();
+            int k = sc.nextInt();
+            Point[] points = new Point[k + 1];
 
-            obstacles = new HashMap<>();
-
-            for (int i = 0; i < K; i++) {
-                int row = sc.nextInt() - 1;
-                int col = sc.nextInt() - 1;
-
-                if (row >= N || col >= M) continue;
-                if (!obstacles.containsKey(row)) {
-                    obstacles.put(row, new ArrayList<>());
-                }
-                obstacles.get(row).add(col);
+            for (int i = 0; i < k; i++) {
+                int a = sc.nextInt();
+                int b = sc.nextInt();
+                points[i] = new Point(a, b);
             }
 
-            int[] dp = new int[M];
-            for (int i = 0; i < M; i++) {
-                if (obstacles.containsKey(0) && obstacles.get(0).contains(i)) {
-                    dp[i] = 0;
-                } else {
-                    dp[i] = i == 0 ? 1 : dp[i - 1];
-                }
-            }
+            Point finalPoint = new Point(n, m);
+            points[k] = finalPoint;
 
+            Arrays.sort(points);
 
-            for (int i = 1; i < N; i++) {
-                int[] newDp = new int[M];
-                for (int j = 0; j < M; j++) {
-                    if (obstacles.containsKey(i) && obstacles.get(i).contains(j)) {
-                        newDp[j] = 0;
-                    } else {
-                        newDp[j] = dp[j];
-                        if (j > 0) {
-                            newDp[j] = (newDp[j] + newDp[j - 1]) % MOD;
-                        }
+            int index = Arrays.binarySearch(points, finalPoint);
+
+            int[] pathNumber = new int[index + 1];
+
+            for (int i = 0; i < index + 1; i++) {
+                long otherPointPathNumber = 0;
+
+                if (points[i].y > m || points[i].x > n)
+                    continue;
+
+                for (int j = 0; j < i; j++) {
+                    if (points[j].y <= points[i].y && points[j].x <= points[i].x) {
+
+                        long temp = pathNumber[j];
+
+                        temp = (temp * combination(points[i].x - points[j].x + points[i].y - points[j].y, points[i].y - points[j].y)) % MOD;
+
+                        otherPointPathNumber = (otherPointPathNumber + temp) % MOD;
                     }
                 }
-                dp = newDp;
+
+                int totalPath = combination(points[i].x + points[i].y - 2, points[i].x - 1);
+                totalPath -= (int) otherPointPathNumber;
+                totalPath = (MOD + totalPath) % MOD;
+
+                pathNumber[i] = totalPath;
             }
 
-            Answer = dp[M - 1] % MOD;
+            Answer = pathNumber[index];
 
             // Print the answer to standard output(screen).
             System.out.println("Case #" + (test_case + 1));
             System.out.println(Answer);
+        }
+    }
+
+    public static int combination(int a, int b) {
+        long e = factorial[a];
+        e = (e * factorialInverse[b]) % MOD;
+        e = (e * factorialInverse[a - b]) % MOD;
+        return (int) e;
+    }
+
+    static int[] factorial = new int[MAX_OBSTACLE + 1];
+    static int[] factorialInverse = new int[MAX_OBSTACLE + 1];
+
+    public static void init() {
+        long o = 1;
+        factorial[0] = 1;
+        for (int i = 1; i < MAX_OBSTACLE + 1; i++) {
+            o = (o * i) % MOD;
+            factorial[i] = (int) o;
+        }
+        long oi = inversefactorial((int) o);
+        for (int i = MAX_OBSTACLE; i >= 0; i--) {
+            factorialInverse[i] = (int) oi;
+            oi = (oi * i) % MOD;
+        }
+    }
+
+    public static int inversefactorial(int x) {
+        return power(x, MOD - 2);
+    }
+
+    public static int power(int x, int p) {
+        if (p == 1)
+            return x;
+        int t = power(x, p / 2);
+        long result = t;
+        result = (result * t) % MOD;
+        if (p % 2 == 1) {
+            result = (result * x) % MOD;
+        }
+        return (int) result;
+    }
+
+    static class Point implements Comparable<Point> {
+        int x;
+        int y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public int compareTo(Point o) {
+            if (x > o.x)
+                return 1;
+            else if (x < o.x)
+                return -1;
+            else {
+                if (y > o.y)
+                    return 1;
+                else if (y < o.y)
+                    return -1;
+                else
+                    return 0;
+            }
         }
     }
 }
