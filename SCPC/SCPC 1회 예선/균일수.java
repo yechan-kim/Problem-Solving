@@ -16,11 +16,10 @@ import java.util.Scanner;
  */
 class Solution {
     static int Answer;
-    static int N;
 
     public static void main(String args[]) throws Exception {
 		/*
-		   The method below means that the program will read from input.txt, instead of standard(keyboard) input.
+		   The method below meAnswer that the program will read from input.txt, instead of standard(keyboard) input.
 		   To test your program, you may save input data in input.txt file,
 		   and call below method to read from the file when using nextInt() method.
 		   You may remove the comment symbols(//) in the below statement and use it.
@@ -36,77 +35,51 @@ class Solution {
         int T = sc.nextInt();
         for (int test_case = 0; test_case < T; test_case++) {
 
+            Answer = -1;
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   Implement your algorithm here.
-			   The answer to the case will be stored in variable Answer.
+			   The Answer to the case will be stored in variable Answer.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
-            N = sc.nextInt();
-            Answer = N - 1;
+            int N = sc.nextInt();
+            int b = 2;
+            int SaveN = N;
 
-            for (int i = 2; i <= Math.min(N, Math.pow(10, 5)); i++) {
+            while (b * b <= N) {
+                if (SaveN < b && SaveN % b == N % b) Answer = b;
 
-                if (check_uniform(i) == 1) {
-                    Answer = i;
-                    break;
+                if (SaveN % b == N % b) {
+                    SaveN = SaveN / b;
+                } else {
+                    SaveN = N;
+                    b++;
                 }
             }
 
-            if (Answer == N - 1) {
-                Answer = modu(N);
+            if (Answer == -1) {
+                int i = 1;
+
+                while (i * i <= N) {
+                    if (N % i == 0) {
+                        b = N / i - 1;
+
+                        if (b > i) {
+                            Answer = b;
+                        }
+                    }
+
+                    i++;
+                }
             }
 
-            // Print the answer to standard output(screen).
+            if (Answer == -1) {
+                Answer = N + 1;
+            }
+
+            // Print the Answer to standard output(screen).
             System.out.println("Case #" + (test_case + 1));
             System.out.println(Answer);
-        }
-    }
-
-    static int modu(int N) {
-        int mini = N - 1;
-
-        for (int i = 2; i <= Math.pow(10, 4); i++) {
-            if (N % i == 0) {
-                if (N / i - 1 > Math.pow(10, 5)) {
-                    mini = Math.min(N / i - 1, mini);
-                }
-            }
-        }
-
-        return mini;
-    }
-
-    static int check_base_square(int base) {
-        for (int i = 0; i <= 30; i++) {
-            if (N < Math.pow(base, i)) {
-                return i - 1;
-
-            }
-        }
-
-        return 0;
-    }
-
-    static int check_uniform(int base) {
-        int Q;
-        int max_square;
-
-        max_square = check_base_square(base);
-
-        Q = N % base;
-
-        int sum = 0;
-
-        for (int i = 0; i <= max_square; i++) {
-            sum += (int) (Q * Math.pow(base, i));
-
-        }
-
-        if (sum == N) {
-            return 1;
-        } else {
-            return 0;
         }
     }
 }
