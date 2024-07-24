@@ -15,7 +15,7 @@ import java.util.Scanner;
    In any case, you can execute your program by running 'java Solution' command.
  */
 class Solution {
-    static long Answer;
+    static int Answer;
 
     public static void main(String args[]) throws Exception {
 		/*
@@ -35,82 +35,40 @@ class Solution {
         int T = sc.nextInt();
         for (int test_case = 0; test_case < T; test_case++) {
 
-            Answer = 0;
+            Answer = 1;
             /////////////////////////////////////////////////////////////////////////////////////////////
 			/*
 			   Implement your algorithm here.
 			   The answer to the case will be stored in variable Answer.
 			 */
             /////////////////////////////////////////////////////////////////////////////////////////////
-            int M = sc.nextInt();
+            int N = sc.nextInt();
+            long MIN = Long.MAX_VALUE;
+            long temp = 0;
 
-            long num1 = sc.nextLong();
-            long num2 = sc.nextLong();
+            for (int i = 0; i < N; i++) {
+                long x = sc.nextLong();
 
-            long gcd = num2 - num1;
+                if (i == 0) {
+                    temp = x;
+                } else {
+                    if (x - temp < MIN) {
+                        MIN = x - temp;
+                    }
 
-            for (int i = 2; i < M; i++) {
-                num1 = num2;
-                num2 = sc.nextInt();
-                gcd = gcd(gcd, num2 - num1);
-
-                if (gcd < 0) {
-                    break;
-
+                    temp = x;
                 }
             }
 
-            Answer = numberOfDivisor(gcd);
+            for (long i = 1; i <= MIN / 2; i++) {
+                if (MIN % i == 0) {
+                    Answer++;
+                }
+            }
 
             // Print the answer to standard output(screen).
             System.out.println("Case #" + (test_case + 1));
             System.out.println(Answer);
         }
-    }
-
-    public static long gcd(long num1, long num2) {
-        if (num1 == 0 && num2 == 0) {
-            return 0;
-        } else if (num1 == 0 || num2 == 0) {
-            return -1;
-        }
-
-        long mod = num1 % num2;
-
-        while (mod > 0) {
-            num1 = num2;
-            num2 = mod;
-            mod = num1 % num2;
-        }
-
-        return num2;
-    }
-
-    public static long numberOfDivisor(long n) {
-        if (n < 0) {
-            return 0;
-        }
-
-        if (n == 1 || n == 0) {
-            return 1;
-        }
-
-        long result = 1;
-
-        double sqrt = Math.sqrt(n);
-
-        for (int i = 2; i < sqrt; i++) {
-            if (n % i == 0) {
-                result++;
-            }
-        }
-
-        result = result * 2;
-
-        if (sqrt == (int) sqrt) {
-            result++;
-        }
-
-        return result;
     }
 }
