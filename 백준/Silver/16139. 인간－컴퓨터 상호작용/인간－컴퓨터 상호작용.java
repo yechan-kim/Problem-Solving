@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -10,6 +12,9 @@ public class Main {
 
         String s = br.readLine();
         int q = Integer.parseInt(br.readLine());
+        int n = s.length();
+
+        Map<Character, int[]> prefixSumMap = new HashMap<>();
 
         for (int i = 0; i < q; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -17,15 +22,22 @@ public class Main {
             int l = Integer.parseInt(st.nextToken());
             int r = Integer.parseInt(st.nextToken());
 
-            char[] subStrCharArr = s.substring(l, r + 1).toCharArray();
+            if (!prefixSumMap.containsKey(a)) {
+                int[] prefix = new int[n + 1];
 
-            int cnt = 0;
+                for (int j = 0; j < n; j++) {
+                    prefix[j + 1] = prefix[j];
 
-            for (char c : subStrCharArr) {
-                if (c == a) {
-                    cnt++;
+                    if (s.charAt(j) == a) {
+                        prefix[j + 1] += 1;
+                    }
                 }
+
+                prefixSumMap.put(a, prefix);
             }
+
+            int[] prefix = prefixSumMap.get(a);
+            int cnt = prefix[r + 1] - prefix[l];
 
             bw.write(cnt + "\n");
         }
