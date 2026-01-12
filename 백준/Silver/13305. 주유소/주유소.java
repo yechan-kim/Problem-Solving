@@ -26,15 +26,15 @@ public class Main {
 
         br.close();
 
-        int sum = 0;
+        long sum = 0L;
 
-        sum += distance[0] * fuelPrice[0];
+        sum += (long) distance[0] * fuelPrice[0];
 
         for (int i = 1; i < n - 1; i++) {
             if (fuelPrice[i - 1] < fuelPrice[i]) {
                 fuelPrice[i] = fuelPrice[i - 1];
             }
-            sum += distance[i] * fuelPrice[i];
+            sum += (long) distance[i] * fuelPrice[i];
         }
 
         bw.write(sum + "\n");
